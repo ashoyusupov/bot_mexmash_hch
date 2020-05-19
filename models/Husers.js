@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	const Users = sequelize.define('Users', {
+	const Husers = sequelize.define('Husers', {
 		user_id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true
@@ -13,5 +13,5 @@ module.exports = (sequelize, DataTypes) => {
 		language: DataTypes.STRING
 	})
 
-	return Users
+	return Husers
 }

@@ -1,4 +1,4 @@
-const { Users, Orders, Feedbacks, Hcheck } = require('../models')
+const { Husers, Orders, Feedbacks, Hcheck } = require('../models')
 const db = require('../models')
 
 db.sequelize.getQueryInterface().showAllSchemas().then((tableObj) => {
@@ -38,7 +38,7 @@ module.exports = {
 		try {
 			let data = {}
 			data[column] = input
-			const result = await Users.update(
+			const result = await Husers.update(
 				data,
 				{ where: { user_id: tgid } }
 			)
@@ -55,7 +55,7 @@ module.exports = {
 			data['user_status'] = 'REGISTERED'
 			data['phone_number'] = msg.contact.phone_number
 			data['fio'] = msg.chat.first_name
-			const result = await Users.update(
+			const result = await Husers.update(
 				data,
 				{ 
 					where: { username: msg.chat.username }
@@ -73,7 +73,7 @@ module.exports = {
 			let data = {}
 			data['user_id'] = tgid
 			data['user_status'] = 'REGISTERED'
-			const result = await Users.update(
+			const result = await Husers.update(
 				data,
 				{ 
 					where: { phone_number: phone }
@@ -92,7 +92,7 @@ module.exports = {
 			})
 			console.log(users)
 			let text = '👨‍⚕️ Ходимларнинг соглиги холати:\n'
-			for (let i = 0; i < users.length; i++) {
+			for (let i = 0; i < Husers.length; i++) {
 				let row = users[i]
 				let userStatus = (row.hstatus=='good'?'✅ <b>good</b>':(row.hstatus=='bad'?'❌ bad':'ro\'yxatdan o\'tmagan'))
 				let userFio = ((row.fio==null||row.fio=='')?(row.username==''||row.username==null?row.phone_number:row.username):row.fio)
@@ -109,7 +109,7 @@ module.exports = {
 	},
 	async getUsers (param) {
 		try {
-			const users = await Users.findAll({
+			const users = await Husers.findAll({
 				raw: true,
 				where: {
 					user_status: 'REGISTERED',
@@ -128,14 +128,14 @@ module.exports = {
 	},
 	async getUnregs () {
 		try {
-			const users = await Users.findAll({
+			const users = await Husers.findAll({
 				raw: true,
 				where: {
 					user_status: null
 				}
 			})
 			let text = 'Список кто не регистрировался:\n'
-			for (let i = 0; i < users.length; i++) {
+			for (let i = 0; i < Husers.length; i++) {
 				let row = users[i]
 				text += row.fio+'\n'
 			}
@@ -149,7 +149,7 @@ module.exports = {
 	},
 	async checkUser (tgid) {
 		try {
-			const users = await Users.findAll({
+			const users = await Husers.findAll({
 				raw: true,
 				limit: 1,
 				where: {
@@ -166,7 +166,7 @@ module.exports = {
 	},
 	async onerecord () {
 		try {
-			const users = await Users.findAll({
+			const users = await Husers.findAll({
 				raw: true,
 				limit: 10
 			})
@@ -226,7 +226,7 @@ module.exports = {
 	},
 	async newOrder (tgid, meta) {
 		try {
-			const res = await Users.findAll({
+			const res = await Husers.findAll({
 				raw: true,
 				limit: 1,
 				where: {
@@ -254,7 +254,7 @@ module.exports = {
 	},
 	async newUser (tgid, msg) {
 		try {
-			const created = await Users.findOrCreate({
+			const created = await Husers.findOrCreate({
 				where: {//object containing fields to found
 					user_id: tgid
 				},
@@ -265,7 +265,7 @@ module.exports = {
 				}
 			})
 			return created
-			// const user = await Users.create({
+			// const user = await Husers.create({
 			// 	tgid: tgid,
 			// 	username: msg.from.username,
 			// 	name: msg.from.first_name,
